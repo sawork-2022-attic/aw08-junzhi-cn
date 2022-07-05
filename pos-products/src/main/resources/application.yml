@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: pos-products
+server:
+  port: 8688
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8888/eureka/
+  instance:
+    instance-id: ${spring.application.name}:${random.uuid}
