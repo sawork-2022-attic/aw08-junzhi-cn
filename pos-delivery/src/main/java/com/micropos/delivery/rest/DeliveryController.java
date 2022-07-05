@@ -7,6 +7,7 @@ import com.micropos.dto.DeliveryEntryDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("api")
+@RequestMapping("/delivery")
 public class DeliveryController implements DeliveryApi {
 
     private DeliveryMapper deliveryMapper;
@@ -28,8 +29,10 @@ public class DeliveryController implements DeliveryApi {
     public void setDeliveryService(DeliveryService deliveryService) { this.deliveryService = deliveryService; }
 
     @Override
+    @GetMapping()
     public ResponseEntity<List<DeliveryEntryDto>> listDelivery() {
         List<DeliveryEntryDto> entries = new ArrayList<>(deliveryMapper.toEntryDtos(deliveryService.getAllEntries()));
+        System.out.println("Below are the deliveries:");
         return new ResponseEntity<>(entries, HttpStatus.OK);
     }
 

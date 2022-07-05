@@ -5,7 +5,7 @@ info:
   license:
     name: MIT
 servers:
-  - url: http://localhost:8080/api
+  - url: http://localhost:8080
 paths:
   /carts:
     get:
@@ -145,10 +145,11 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+
   /carts/{cartId}/checkout:
     post:
       summary: checkout cart, generate an order
-      operationId: checkoutCart
+      operationId: checkOut
       tags:
         - cart
       parameters:
@@ -172,7 +173,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-
   /orders:
     get:
       summary: List all orderss
@@ -322,6 +322,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+
   /delivery:
     get:
       summary: List all delivery
@@ -367,7 +368,7 @@ components:
         items:
           type: array
           items:
-            $ref: "#/components/schemas/CartItem"
+            $ref: "#/components/schema/CartItem"
     Orders:
       type: array
       items:

@@ -43,11 +43,10 @@ public class OrderServiceImpl implements OrderService {
     public void setStreamBridge(StreamBridge streamBridge) { this.streamBridge = streamBridge; }
 
     @Override
-    public Order createOrder(CartDto cart, String time) {
+    public Order createOrder(CartDto cartDto, String time) {
         Order order = new Order().time(time);
-        order = orderRepository.save(order);
         List<Item> items = new ArrayList<>();
-        for (CartItemDto cartItem : cart.getItems()) {
+        for (CartItemDto cartItem : cartDto.getItems()) {
             items.add(
                     new Item().id(null)
                             .productId(cartItem.getProduct().getId())
@@ -57,8 +56,8 @@ public class OrderServiceImpl implements OrderService {
 
         }
         order.items(items);
-        order = orderRepository.save(order);
-        //orderDtoToSend = orderMapper.toOrderDto(order);
+        order = orderRepository.saveOrder(order);
+        orderDtoToSend = orderMapper.toOrderDto(order);
         sendOrder(order); // send order to rabbitmq
         return order;
     }
@@ -68,26 +67,23 @@ public class OrderServiceImpl implements OrderService {
         streamBridge.send("order-send", orderMapper.toOrderDto(order));
     }
 
+    private OrderDto orderDtoToSend = new OrderDto().id(-1).time("2022-1-1");
 
-    // use streamBridge
-//    private OrderDto orderDtoToSend = new OrderDto().id(-1).time("2022-1-1");
-//
-//    @Bean
-//    public Supplier<OrderDto> supplyOrder() {
-//
-//        return () -> {
-//            log.info("supply {}", orderDtoToSend.toString());
-//            return orderDtoToSend;
-//        };
-//    }
-
-    @Override
-    public List<Order> getAllOrders() {
-        return Streamable.of(orderRepository.findAll()).toList();
+    @Bean
+    public Supplier<OrderDto> supplyOrder() {
+        return () -> {
+            log.info("supply {}", orderDtoToSend.toString());
+            return orderDtoToSend;
+        };
     }
 
     @Override
-    public Optional<Order> getOrder(Integer orderId) {
-        return orderRepository.findById(orderId);
+    public List<Order> getAllOrders() {
+        return Streamable.of(orderRepository.findAllOrders()).toList();
+    }
+
+    @Override
+    public Order getOrder(Integer orderId) {
+        return (Order) orderRepository.findOrderById(orderId);
     }
 }

@@ -12,5 +12,5 @@ public interface DeliveryService {
 
     List<Entry> getAllEntries();
 
-    Optional<Entry> getEntry(Integer orderId);
+    Entry getEntry(Integer orderId);
 }

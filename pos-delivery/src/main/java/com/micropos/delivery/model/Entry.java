@@ -20,4 +20,12 @@ public class Entry implements Serializable {
     @Getter
     @Setter
     private String status;
+
+    public int getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Integer orderId){
+        this.orderId = orderId;
+    }
 }

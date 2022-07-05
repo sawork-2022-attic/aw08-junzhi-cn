@@ -22,10 +22,10 @@ spring:
           destination: order-channel
 
 server:
-  port: 8687
+  port: 8086
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:8888/eureka/
+      defaultZone: http://localhost:8761/eureka/
   instance:
     instance-id: ${spring.application.name}:${random.uuid}
